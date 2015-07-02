@@ -7,8 +7,9 @@ public class ViewsManager : MonoBehaviour {
   // public List<GameObject> Views = new List<GameObject>();
    public GameObject[] Views;
    public TouchAction Touch_Action;
-   public int CurrentView { get; private set; }
+   public int CurrentView;
    public float CameraMoveSpeed;
+   public double Delay;
    public Camera camera;
 
 	// Use this for initialization
@@ -17,9 +18,6 @@ public class ViewsManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Touch_Action.MoveDirection != TouchAction.Direction.NO_DETECTED_MOVE)
-        {
-            Debug.Log(Touch_Action.MoveDirection);
-        }
+
 	}
 }
