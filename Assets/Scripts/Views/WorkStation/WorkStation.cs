@@ -15,11 +15,10 @@ public class WorkStation : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+       // Debug.Log(transform.parent.gameObject.transform.parent.name);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 }

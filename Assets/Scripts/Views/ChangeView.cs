@@ -28,10 +28,10 @@ public class ChangeView : MonoBehaviour {
             switch (Direction)
             {
                 case TouchAction.Direction.LEFT:
-                    MoveLeft();
+                    MoveRight();
                     break;
                 case TouchAction.Direction.RIGHT:
-                    MoveRight();
+                    MoveLeft();
                     break;
 
             }
