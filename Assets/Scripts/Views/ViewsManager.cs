@@ -20,4 +20,5 @@ public class ViewsManager : MonoBehaviour {
 	void Update () {
 
 	}
+
 }

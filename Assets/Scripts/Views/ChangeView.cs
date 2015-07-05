@@ -42,7 +42,6 @@ public class ChangeView : MonoBehaviour {
         switch (StartMoving)
         {
             case TouchAction.Direction.LEFT:
-                Debug.Log("Move Left");
                 float Goal = Vector2.Distance(camera.transform.position, Views[Manager.CurrentView - 1].transform.position);
                 if (Goal > 0)
                 {
@@ -59,6 +58,8 @@ public class ChangeView : MonoBehaviour {
                 {
                     StartMoving = TouchAction.Direction.NO_DETECTED_MOVE;
                     Manager.CurrentView = Manager.CurrentView - 1;
+
+                    Manager.Touch_Action.Swap = TouchAction.SwapState.ENABLED;
                 }
                 break;
 
@@ -79,6 +80,7 @@ public class ChangeView : MonoBehaviour {
                 {
                     StartMoving = TouchAction.Direction.NO_DETECTED_MOVE;
                     Manager.CurrentView = Manager.CurrentView + 1;
+                    Manager.Touch_Action.Swap = TouchAction.SwapState.ENABLED;
                 }
                 break;
         }
