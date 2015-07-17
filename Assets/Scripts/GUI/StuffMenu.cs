@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class StuffMenu : MonoBehaviour {
 
-    public List<GameObject> Stuffs;
+    public List<RectTransform> Stuffs;
     public RectTransform StuffBackground;
     public Vector2 CelSize;
     public GameObject DialogBox;
@@ -54,7 +54,7 @@ public class StuffMenu : MonoBehaviour {
         SetPosition(Stuff);
         Stuff = SetAnchor(Stuff);
 
-        Stuffs.Add(Stuff.gameObject);
+        Stuffs.Add(Stuff);
         CalculatePointer();
     }
 
@@ -83,8 +83,6 @@ public class StuffMenu : MonoBehaviour {
 
     private void CalculatePointer()
     {
-        Debug.Log(Pointer.x);
-        Debug.Log(MaxElementHorizontal);
         if (Pointer.x < MaxElementHorizontal - 1)
         {
             Pointer.x = Pointer.x + 1;
@@ -106,9 +104,18 @@ public class StuffMenu : MonoBehaviour {
         MaxElementVertical = (int)(StuffBackground.rect.height / CelSize.y);
     }
 
-    public void test()
+    public void Sort()
     {
-        Debug.Log(Stuffs.Count);
+        Pointer = Vector2.zero;
+        int Size = transform.GetChild(0).childCount;
+        Debug.Log(Size);
+        for (int i = 0; i <= Size - 1; i++)
+        {
+            RectTransform Stuff_item =  transform.GetChild(0).GetChild(i) as RectTransform;
+            SetPosition(Stuff_item);
+            Stuff_item = SetAnchor(Stuff_item);
+            CalculatePointer();
+        }
     }
 
     public void setDialogBox(GameObject DialogBox, GameObject Stuff)
@@ -117,6 +124,18 @@ public class StuffMenu : MonoBehaviour {
         DialogBoxScript.SelectedItem = Stuff;
         DialogBoxScript.stuffMenu = this;
         
-    } 
+    }
+
+    public void Sell_ALL()
+    {
+        Pointer = Vector2.zero;
+        int Size = transform.GetChild(0).childCount;
+        Debug.Log(Size);
+        for (int i = 0; i <= Size - 1; i++)
+        {
+            RectTransform Stuff_item = transform.GetChild(0).GetChild(i) as RectTransform;
+            Destroy(Stuff_item.gameObject);
+        }
+    }
 
 }

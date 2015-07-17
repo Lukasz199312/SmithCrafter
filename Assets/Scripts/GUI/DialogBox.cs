@@ -21,8 +21,11 @@ public class DialogBox : MonoBehaviour {
 
     public void Sell_Stuff()
     {
+        Debug.Log(stuffMenu.transform.GetChild(0).childCount);
         this.gameObject.SetActive(false);
-        stuffMenu.test();
+        SelectedItem.transform.parent = null;
         Destroy(SelectedItem);
+        stuffMenu.Sort();
     }
+
 }
