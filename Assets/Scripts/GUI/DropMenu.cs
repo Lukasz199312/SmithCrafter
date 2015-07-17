@@ -5,6 +5,10 @@ public class DropMenu : MonoBehaviour {
 
     public Canvas Menu;
 
+    public Canvas BuyMenu;
+    public Canvas EmptyStationMenu;
+    public Canvas WorkStationMenu;
+
     private ViewsManager _ViewsManager;
     private GameObject SelectedObject;
     private CanvasGroup canvasgroup;
@@ -16,34 +20,61 @@ public class DropMenu : MonoBehaviour {
         _ViewsManager = GetComponent<ViewsManager>();
         canvasgroup = Menu.GetComponent<CanvasGroup>();
         anim = Menu.GetComponent<Animator>();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-        if (object.Equals(SelectedObject, _ViewsManager.Touch_Action.SelectedObject) == false && isMenuOpen == false)
+        GameObject Object = _ViewsManager.Touch_Action.Touch.SelectedGameObject;
+        if (object.Equals(Object, SelectedObject) == false && isMenuOpen == false)
         {
-            //canvasgroup.alpha = 1f;
-            SelectedObject =  _ViewsManager.Touch_Action.SelectedObject;
-            Menu.transform.position = SelectedObject.transform.position;
-            anim.SetBool("Start", true);
-            isMenuOpen = true;
-            _ViewsManager.Touch_Action.Swap = TouchAction.SwapState.DISABLED;
+            switch (Object.tag)
+            {
+                case "BuyStation":
+                    Menu.enabled = false;
+                    Menu = BuyMenu;
+                    anim = Menu.GetComponent<Animator>();
+                    Menu.enabled = true;
+                    break;
+
+                case "WorkStation":
+                    Menu.enabled = false;
+                    Menu = WorkStationMenu;
+                    anim = Menu.GetComponent<Animator>();
+                    Menu.enabled = true;
+                    break;
+            }
+
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Exit"))
+            {
+                SelectedObject = _ViewsManager.Touch_Action.Touch.SelectedGameObject;
+                canvasgroup.alpha = 1f;
+                Menu.transform.position = SelectedObject.transform.position;
+                anim.SetBool("Start", true);
+                isMenuOpen = true;
+                _ViewsManager.Touch_Action.Touch.Mask = 1 << 4;
+               // _ViewsManager.Touch_Action.Swap.Enabled = false;
+            }
+            else
+            {
+                _ViewsManager.Touch_Action.Touch.UntachedObject();
+               _ViewsManager.Touch_Action.Swap.Enabled = true;
+            }
         }
     }
 
     public void ToggleOffMenu()
     {
-
         if (isMenuOpen == true)
         {
-            canvasgroup.alpha = 0;
-            _ViewsManager.Touch_Action.UntouchedObject();
+            Debug.Log("Close Menu");
             SelectedObject = null;
-            // Menu.transform.position = new Vector3(0, 0, Menu.transform.position.z);
             anim.SetBool("Start", false);
             isMenuOpen = false;
-            _ViewsManager.Touch_Action.Swap = TouchAction.SwapState.ENABLED;
+            _ViewsManager.Touch_Action.Touch.Mask = 1;
+
         }
     }
+
+    
 }

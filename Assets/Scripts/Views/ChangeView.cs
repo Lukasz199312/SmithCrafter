@@ -8,100 +8,68 @@ public class ChangeView : MonoBehaviour {
 
     private Camera camera;
     private float CameraMoveSpeed;
-    private System.DateTime Time;
+    private bool isMoved = false;
     private GameObject[] Views;
-    private TouchAction.Direction StartMoving = TouchAction.Direction.NO_DETECTED_MOVE;
+    private Vector2[] Touches;
+    private DropMenu dropmenu;
 
 	// Use this for initialization
 	void Start () {
         Views = Manager.Views;
         CameraMoveSpeed = Manager.CameraMoveSpeed;
         camera = Manager.camera;
+        isMoved = false;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (Manager.Touch_Action.MoveDirection != TouchAction.Direction.NO_DETECTED_MOVE)
+        if (Manager.Touch_Action.Swap.isMoving() && !isMoved)
         {
-            TouchAction.Direction Direction = Manager.Touch_Action.MoveDirection;
-
-            switch (Direction)
+            if (Manager.Touch_Action.Swap.BeganPosition.x < Manager.Touch_Action.Swap.EndPosition.x)
             {
-                case TouchAction.Direction.LEFT:
-                    MoveRight();
-                    break;
-                case TouchAction.Direction.RIGHT:
-                    MoveLeft();
-                    break;
-
+                if (Manager.CurrentView - 1 >= 0)
+                {
+                    Manager.CurrentView --;
+                    isMoved = true;
+                }
             }
+            else
+            {
+                if (Manager.CurrentView + 1 <= Views.Length - 1) 
+                {
+                     Manager.CurrentView ++;
+                    isMoved = true;
 
-            Debug.Log(Manager.Touch_Action.MoveDirection);
+                }
+            }
         }
-        else 
-        switch (StartMoving)
+        else if (isMoved == true)
         {
-            case TouchAction.Direction.LEFT:
-                float Goal = Vector2.Distance(camera.transform.position, Views[Manager.CurrentView - 1].transform.position);
-                if (Goal > 0)
-                {
-                    float Camera_Z = camera.transform.position.z;
-
-                    camera.transform.position
-                        = Vector2.MoveTowards(camera.transform.position, Views[Manager.CurrentView - 1].transform.position, CameraMoveSpeed);
-                    camera.transform.position.Set(camera.transform.position.x, camera.transform.position.y, -10);
-                    camera.transform.position = new Vector3(camera.transform.position.x,
-                                                            camera.transform.position.y,
-                                                            Camera_Z);
-                }
-                else
-                {
-                    StartMoving = TouchAction.Direction.NO_DETECTED_MOVE;
-                    Manager.CurrentView = Manager.CurrentView - 1;
-
-                    Manager.Touch_Action.Swap = TouchAction.SwapState.ENABLED;
-                }
-                break;
-
-            case TouchAction.Direction.RIGHT:
-                Debug.Log("Move Right");
-                Goal = Vector2.Distance(camera.transform.position, Views[Manager.CurrentView + 1].transform.position);
-                if (Goal > 0)
-                {
-                    float Camera_Z = camera.transform.position.z;
-                    camera.transform.position
-                        = Vector2.MoveTowards(camera.transform.position, Views[Manager.CurrentView + 1].transform.position, CameraMoveSpeed);
-                    camera.transform.position.Set(camera.transform.position.x, camera.transform.position.y, -10);
-                    camera.transform.position = new Vector3(camera.transform.position.x,
-                                         camera.transform.position.y,
-                                         Camera_Z);
-                }
-                else
-                {
-                    StartMoving = TouchAction.Direction.NO_DETECTED_MOVE;
-                    Manager.CurrentView = Manager.CurrentView + 1;
-                    Manager.Touch_Action.Swap = TouchAction.SwapState.ENABLED;
-                }
-                break;
+            float goal = Vector2.Distance(camera.transform.position, Views[Manager.CurrentView].transform.position);
+            if (goal > 0)
+            {
+                Vector3 NextMove = Views[Manager.CurrentView].transform.position;
+                Vector3 Move = Vector3.MoveTowards(camera.transform.position, new Vector3(NextMove.x,
+                                                                                          NextMove.y,
+                                                                                          camera.transform.position.z),
+                                                                                          CameraMoveSpeed);
+                camera.transform.position = new Vector3(Move.x, Move.y, Move.z);
+            }
+            else
+            {
+                Manager.Touch_Action.Swap.FinishMove();
+                isMoved = false;
+            }
         }
+
 	}
 
     private void MoveLeft()
     {
-        if (Manager.CurrentView - 1 >= 0)
-        {
-            StartMoving = TouchAction.Direction.LEFT;
-        }
-
-        Time = Time.AddSeconds(Manager.Delay);
     }
 
     private void MoveRight()
     {
-        if (Manager.CurrentView + 1 < Views.Length)
-        {
-            StartMoving = TouchAction.Direction.RIGHT;
-            Time = Time.AddSeconds(Manager.Delay);
-        }
     }
 }
