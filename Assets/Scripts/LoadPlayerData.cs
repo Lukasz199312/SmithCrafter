@@ -20,6 +20,12 @@ public class LoadPlayerData : MonoBehaviour {
         {
             PlayerPrefs.SetString("Time", DateTime.Now.ToString());
             PlayerPrefs.SetInt("CharacterCount", 0);
+
+            PlayerPrefs.SetInt("Gold", 0);
+            PlayerPrefs.SetInt("IronOre", 0);
+            PlayerPrefs.SetInt("SilverOre", 0);
+            PlayerPrefs.SetInt("GoldOre", 0);
+            PlayerPrefs.SetInt("Diamond", 0);
         }
 
     }
