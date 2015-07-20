@@ -71,7 +71,7 @@ public class DropMenu : MonoBehaviour {
             SelectedObject = null;
             anim.SetBool("Start", false);
             isMenuOpen = false;
-            _ViewsManager.Touch_Action.Touch.Mask = 1;
+            _ViewsManager.Touch_Action.Touch.Mask = -1;
 
         }
     }

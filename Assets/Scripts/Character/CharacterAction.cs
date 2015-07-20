@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts.Character
 {
-    interface CharacterAction
+    public interface CharacterAction
     {
          object getStatistic();
          object getObject();

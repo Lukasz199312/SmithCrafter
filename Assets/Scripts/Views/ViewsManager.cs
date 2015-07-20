@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Views;
 
 public class ViewsManager : MonoBehaviour {
 
@@ -11,9 +12,12 @@ public class ViewsManager : MonoBehaviour {
    public float CameraMoveSpeed;
    public double Delay;
    public Camera camera;
+   
+    private CharacterManager Characters = new CharacterManager();
 
 	// Use this for initialization
 	void Start () {
+        
 	}
 	
 	// Update is called once per frame

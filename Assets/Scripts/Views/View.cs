@@ -13,6 +13,7 @@ namespace Assets.Scripts.Views
         public WorkStation[] WorkStations;
         public GameObject WorkerObject;
         public GameObject WorkStation;
+        public bool IsActive;
 
         void Start()
         {
