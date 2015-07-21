@@ -26,6 +26,10 @@ public class DialogBox : MonoBehaviour {
         SelectedItem.transform.parent = null;
         Destroy(SelectedItem);
         stuffMenu.Sort();
+        PlayerData.Gold +=PlayerData.Gold + 50;
+        PlayerData.UpdateResources();
+
+        Debug.Log(PlayerData.Gold);
     }
 
 }
