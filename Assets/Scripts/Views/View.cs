@@ -21,23 +21,45 @@ namespace Assets.Scripts.Views
 
             foreach (WorkStation SingleWorkStataion in WorkStations)
             {
-                switch (type)
+                for (int i = 0; i < PlayerData.Workstation.Length; i++)
                 {
-                    case ViewInformation.ViewType.CRAFT_VIEW:
-                        GameObject Worker = null;
-                        switch (SingleWorkStataion.mode)
+                    if (PlayerData.Workstation[i].ID == SingleWorkStataion.ID)
+                    {
+                        if (PlayerData.Workstation[i].mode != SingleWorkStataion.mode)
                         {
-                            case global::WorkStation.Mode.TO_SELL:
-                                    Worker = Instantiate(WorkStation, SingleWorkStataion.transform.position, Quaternion.identity) as GameObject;
-                                break;
-
-                            case global::WorkStation.Mode.ACTIVE:
-                                    Worker = Instantiate(WorkerObject, SingleWorkStataion.transform.position, Quaternion.identity) as GameObject;
-                                break;
+                            SingleWorkStataion.mode = PlayerData.Workstation[i].mode;
+                            SetWorkStationMode(type, SingleWorkStataion);
                         }
-                        Worker.transform.parent = this.transform;
+                        else
+                        {
+                            SetWorkStationMode(type, SingleWorkStataion);
+                        }
+                       
                         break;
+                    }
+
                 }
+            }
+        }
+
+        private void SetWorkStationMode(ViewInformation.ViewType type, WorkStation SingleWorkStation)
+        {
+            switch (type)
+            {
+                case ViewInformation.ViewType.CRAFT_VIEW:
+                    GameObject Worker = null;
+                    switch (SingleWorkStation.mode)
+                    {
+                        case global::WorkStation.Mode.TO_SELL:
+                            Worker = Instantiate(WorkStation, SingleWorkStation.transform.position, Quaternion.identity) as GameObject;
+                            break;
+
+                        case global::WorkStation.Mode.ACTIVE:
+                            Worker = Instantiate(WorkerObject, SingleWorkStation.transform.position, Quaternion.identity) as GameObject;
+                            break;
+                    }
+                    Worker.transform.parent = this.transform;
+                    break;
             }
         }
 

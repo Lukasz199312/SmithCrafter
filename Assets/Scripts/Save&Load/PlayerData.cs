@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerData : MonoBehaviour {
 
@@ -10,17 +11,16 @@ public class PlayerData : MonoBehaviour {
     public static int SilverOre;
     public static int GoldOre;
     public static int Diamond;
-
+    public static WorkStation[] Workstation;
     private static ResourcesManager Resources;
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
 	}
 
     public static void setResourcesManager(ResourcesManager RM)
@@ -32,3 +32,9 @@ public class PlayerData : MonoBehaviour {
         Resources.UpdateAll();
     }
 }
+
+
+/*
+WorkStation int
+
+*/

@@ -5,6 +5,8 @@ using System;
 public class IO_PlayerData : MonoBehaviour
 {
 
+    public int NumberWorkstation;
+
 	// Use this for initialization
 	void Awake () {
         Load();
@@ -12,7 +14,6 @@ public class IO_PlayerData : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 
     private void Load()
@@ -39,11 +40,47 @@ public class IO_PlayerData : MonoBehaviour
             PlayerData.Diamond = PlayerPrefs.GetInt("Diamond");
         }
 
+        InitializeWorkstation();
+
     }
 
     public void Save()
     {
+        PlayerPrefs.SetString("Time", DateTime.Now.ToString());
+        PlayerPrefs.SetInt("CharacterCount", PlayerData.CharacterCount);
+
+        PlayerPrefs.SetInt("Gold", PlayerData.Gold);
+        PlayerPrefs.SetInt("IronOre", PlayerData.IronOre);
+        PlayerPrefs.SetInt("SilverOre", PlayerData.SilverOre);
+        PlayerPrefs.SetInt("GoldOre", PlayerData.GoldOre);
+        PlayerPrefs.SetInt("Diamond", PlayerData.Diamond);
+
         PlayerPrefs.Save();
+    }
+
+    private void InitializeWorkstation()
+    {
+        string NameString = "Workstation-";
+
+        PlayerData.Workstation = new WorkStation[NumberWorkstation];
+
+        for (int i = 0; i < NumberWorkstation; i++)
+        {
+            bool result = PlayerPrefs.HasKey(NameString + i);
+            if (result)
+            {
+                PlayerData.Workstation[i] = new WorkStation();
+                PlayerData.Workstation[i].mode = (WorkStation.Mode)PlayerPrefs.GetInt(NameString + i);
+                PlayerData.Workstation[i].ID = i;
+            }
+            else
+            {
+                PlayerData.Workstation[i] = new WorkStation();
+                PlayerPrefs.SetInt(NameString + i, 0);
+                PlayerData.Workstation[i].mode = WorkStation.Mode.TO_SELL;
+                PlayerData.Workstation[i].ID = i;
+            }
+        }
     }
 
     void OnApplicationQuit()

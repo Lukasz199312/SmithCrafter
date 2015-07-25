@@ -3,22 +3,40 @@ using System.Collections;
 
 public class WorkStation : MonoBehaviour {
 
-    public enum Mode
+    public enum Mode:int
     {
-        ACTIVE,
-        BUSY,
-        TO_SELL
+        ACTIVE = 2,
+        BUSY = 1,
+        TO_SELL = 0,
+        AUTO
     };
 
     public int Price;
     public Mode mode = new Mode();
+    public int ID;
+
+    public int test;
+
+    private const int MaxLevel = 3;
+    private int Level;
 
 	// Use this for initialization
 	void Start () {
-       // Debug.Log(transform.parent.gameObject.transform.parent.name);
+       
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        
 	}
+
+    public bool AddLevel()
+    {
+        if (Level + 1 <= MaxLevel)
+        {
+            Level = Level + 1;
+            return true;
+        }
+        else return false;
+    }
 }
