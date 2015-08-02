@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class WorkStation : MonoBehaviour {
 
@@ -14,29 +15,50 @@ public class WorkStation : MonoBehaviour {
     public int Price;
     public Mode mode = new Mode();
     public int ID;
+    public int Level;
+    public float HitPoints;
+    public float Speed;
 
-    public int test;
-
+    private DateTime Time;
     private const int MaxLevel = 3;
-    private int Level;
+    private StationStatistic Statistic;
 
 	// Use this for initialization
 	void Start () {
-       
+        Time = DateTime.Now;
+
+        Statistic = new StationStatistic();
+
+        Statistic.Level = this.Level;
+        Statistic.HitPoints = this.HitPoints;
+        Statistic.Speed = this.Speed;
+
+        TimeSpan timespan = DateTime.Now - DateTime.Parse(PlayerData.Time);
+
+        int Frequency = (int)(timespan.TotalSeconds / Statistic.Speed);
+
+        Debug.Log("Time span " + timespan.TotalSeconds);
+        Debug.Log("Frequency:" + Frequency);
+
+        PlayerData.Gold = PlayerData.Gold + (25 * Frequency);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        
+        if (mode == Mode.TO_SELL) return;
+
+        if (Time.AddSeconds(Statistic.Speed) < DateTime.Now)
+        {
+            PlayerData.Gold = PlayerData.Gold + 25;
+            PlayerData.UpdateResources();
+
+            Time = DateTime.Now;
+        }
 	}
 
-    public bool AddLevel()
-    {
-        if (Level + 1 <= MaxLevel)
-        {
-            Level = Level + 1;
-            return true;
-        }
-        else return false;
-    }
+
+
+
+
+
 }

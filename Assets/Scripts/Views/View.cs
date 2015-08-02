@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Views
 {
-    class View : MonoBehaviour
+    public class View : MonoBehaviour
     {
         public ViewInformation.ViewType type;
         public ViewInformation Information = new ViewInformation();
@@ -21,24 +21,7 @@ namespace Assets.Scripts.Views
 
             foreach (WorkStation SingleWorkStataion in WorkStations)
             {
-                for (int i = 0; i < PlayerData.Workstation.Length; i++)
-                {
-                    if (PlayerData.Workstation[i].ID == SingleWorkStataion.ID)
-                    {
-                        if (PlayerData.Workstation[i].mode != SingleWorkStataion.mode)
-                        {
-                            SingleWorkStataion.mode = PlayerData.Workstation[i].mode;
-                            SetWorkStationMode(type, SingleWorkStataion);
-                        }
-                        else
-                        {
-                            SetWorkStationMode(type, SingleWorkStataion);
-                        }
-                       
-                        break;
-                    }
-
-                }
+                SetWorkStationMode(type, SingleWorkStataion);
             }
         }
 

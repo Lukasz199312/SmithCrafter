@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Views;
 
 public class ChangeView : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class ChangeView : MonoBehaviour {
     private Camera camera;
     private float CameraMoveSpeed;
     private bool isMoved = false;
-    private GameObject[] Views;
+    private View[] Views;
     private Vector2[] Touches;
     private DropMenu dropmenu;
 

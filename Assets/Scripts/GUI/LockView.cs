@@ -13,6 +13,7 @@ public class LockView : MonoBehaviour {
 
         for (int i = 0; i < Views.Length; i++)
         {
+           Views[i] = new View();
            Views[i] =  ViewManager.Views[i].GetComponent<View>();
         }
 

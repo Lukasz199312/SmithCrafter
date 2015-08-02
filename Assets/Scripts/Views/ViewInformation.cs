@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Assets.Scripts.Character;
 
 namespace Assets.Scripts.Views
 {
-    class ViewInformation
+    public class ViewInformation
     {
         public enum ViewType
         {
