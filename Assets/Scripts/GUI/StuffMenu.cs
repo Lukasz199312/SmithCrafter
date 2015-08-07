@@ -56,6 +56,12 @@ public class StuffMenu : MonoBehaviour {
 
         Stuffs.Add(Stuff);
         CalculatePointer();
+
+        Item item = new Item();
+        item.Information = new ItemInformation();
+        item.Information.SetID(20);
+
+        PlayerData.AddWeapon(item);
     }
 
 

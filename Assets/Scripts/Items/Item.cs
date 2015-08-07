@@ -3,11 +3,12 @@ using System.Collections;
 
 public class Item : MonoBehaviour {
 
-    ItemInformation Information;
+    public ItemInformation Information;
 
 	// Use this for initialization
 	void Start () {
-        Information = GetComponent<ItemInformation>();
+       // Information = GetComponent<ItemInformation>();
+        if (Information == null) Information = new ItemInformation();
 	}
 	
 	// Update is called once per frame
