@@ -8,10 +8,15 @@ public class DialogBox : MonoBehaviour {
     public Button Sell_ALL;
     public GameObject SelectedItem;
     public StuffMenu stuffMenu;
+    public RawImage IconImage;
+    public Text NameItem;
+    public Text DMG;
+    public Text Pieces;
+    public Text Price;
+    public Item item;
 
 	// Use this for initialization
 	void Start () {
-	
 	}
 	
 	// Update is called once per frame
@@ -28,8 +33,12 @@ public class DialogBox : MonoBehaviour {
         stuffMenu.Sort();
         PlayerData.Gold = PlayerData.Gold + 50;
         PlayerData.UpdateResources();
-
         Debug.Log(PlayerData.Gold);
+        PlayerData.RemoveSlot(item.getSlotID());
     }
 
+    public void SetDMG(string MIN, string Max)
+    {
+        DMG.text = "DMG: " + " " + MIN + " ~ " + Max;
+    }
 }

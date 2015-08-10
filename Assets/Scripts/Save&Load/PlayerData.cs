@@ -43,22 +43,26 @@ public class PlayerData : MonoBehaviour {
         Resources.UpdateAll();
     }
 
-    public static void AddWeapon(Item item)
+    public static bool AddWeapon(Item item) // zwraca true jestli tworzy nowy slot
     {
 
         foreach (Item weapon in Weapons)
         {
             if (weapon.Information.getID() == item.Information.getID())
             {
+                weapon.setSlotID(InventoryHeadID);
                 weapon.Information.Number++;
                 Debug.Log("Zwieszkono ilosc itemu");
-                return;
+                return false;
             }
         }
         InventoryHeadID++;
         item.Information.Number++;
+        item.setSlotID(InventoryHeadID);
         Weapons.Add(item);
         Debug.Log("dodano nowy slot");
+        return true;
+
     }
 
     public static void IncreaseInventoryHead()
@@ -76,9 +80,32 @@ public class PlayerData : MonoBehaviour {
         return InventoryHeadID;
     }
 
+    public static void setInventoryHeadID(int ID)
+    {
+        InventoryHeadID = ID;
+    }
+
     public static ArrayList getWeaponsList()
     {
         return Weapons;
+    }
+
+    public static void RemoveSlot(int id)
+    {
+        Debug.Log("PRZED: " + Weapons.ToArray().Length);
+        Weapons.RemoveAt(id-1);
+        Debug.Log("PO: " + Weapons.ToArray().Length);
+        DecreaseInventoryHead();
+    }
+
+    public static void SortSlots()
+    {
+        int id = 1;
+        foreach(Item item in Weapons)
+        {
+            item.setSlotID(id);
+            id++;
+        }
     }
 }
 

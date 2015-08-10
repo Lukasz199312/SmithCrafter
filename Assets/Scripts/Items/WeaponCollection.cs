@@ -18,10 +18,6 @@ public class WeaponCollection : MonoBehaviour {
 
         PlayerData.setWeaponList(this);
 
-        string test = "011";
-        int a = Convert.ToInt32(test);
-        Debug.Log(a);
-
 	}
 	
 	// Update is called once per frame

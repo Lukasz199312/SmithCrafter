@@ -23,8 +23,12 @@ public class WorkStation : MonoBehaviour {
     private const int MaxLevel = 3;
     private StationStatistic Statistic;
 
+    private bool PAUSE = false;
+    private DateTime PauseTime = new DateTime();
+
 	// Use this for initialization
 	void Start () {
+
         Time = DateTime.Now;
 
         Statistic = new StationStatistic();
@@ -33,12 +37,17 @@ public class WorkStation : MonoBehaviour {
         Statistic.HitPoints = this.HitPoints;
         Statistic.Speed = this.Speed;
 
-        TimeSpan timespan = DateTime.Now - DateTime.Parse(PlayerData.Time);
+       // TimeSpan timespan = DateTime.Now - DateTime.Parse(PlayerData.Time);
+        if (mode == Mode.TO_SELL) return;
+        DateTime time = new DateTime();
+        time = DateTime.Parse(PlayerData.Time);
+
+        TimeSpan timespan = DateTime.Now - time;
 
         int Frequency = (int)(timespan.TotalSeconds / Statistic.Speed);
 
-        Debug.Log("Time span " + timespan.TotalSeconds);
-        Debug.Log("Frequency:" + Frequency);
+       // Debug.Log("Time span " + timespan.TotalSeconds);
+       // Debug.Log("Frequency:" + Frequency);
 
         PlayerData.Gold = PlayerData.Gold + (25 * Frequency);
 	}
@@ -46,6 +55,18 @@ public class WorkStation : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (mode == Mode.TO_SELL) return;
+
+        if (PAUSE == true)
+        {
+            PAUSE = false;
+
+
+            TimeSpan timespan = DateTime.Now - PauseTime;
+
+            int Frequency = (int)(timespan.TotalSeconds / Statistic.Speed);
+
+            PlayerData.Gold = PlayerData.Gold + (25 * Frequency);
+        }
 
         if (Time.AddSeconds(Statistic.Speed) < DateTime.Now)
         {
@@ -59,6 +80,15 @@ public class WorkStation : MonoBehaviour {
 
 
 
+    void OnApplicationPause()
+    {
+        if (PAUSE == false)
+        {
+            PAUSE = true;
+            PauseTime = DateTime.Now;
 
+        }
+
+    }
 
 }

@@ -8,10 +8,12 @@ public class IO_PlayerData : MonoBehaviour
 
     public int NumberWorkstation;
     public ViewsManager _ViewManager;
+    public WeaponCollection WeaponList;
 
     // Use this for initialization
     void Awake()
     {
+      //  PlayerPrefs.DeleteAll();
         Load();
     }
 
@@ -28,7 +30,8 @@ public class IO_PlayerData : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("Time") == false)
         {
-            PlayerPrefs.SetString("Time", DateTime.Now.ToString());
+
+            PlayerPrefs.SetString("Time", DateTime.Now.ToString() );
             PlayerPrefs.SetInt("CharacterCount", 0);
             PlayerPrefs.SetInt("InventoryHeadID", 0);
 
@@ -42,13 +45,16 @@ public class IO_PlayerData : MonoBehaviour
 
         PlayerData.Time = PlayerPrefs.GetString("Time");
         PlayerData.CharacterCount = PlayerPrefs.GetInt("CharacterCount");
+        PlayerData.setInventoryHeadID(0);
+
+
         PlayerData.Gold = PlayerPrefs.GetInt("Gold");
         PlayerData.IronOre = PlayerPrefs.GetInt("IronOre");
         PlayerData.SilverOre = PlayerPrefs.GetInt("SilverOre");
         PlayerData.GoldOre = PlayerPrefs.GetInt("GoldOre");
         PlayerData.Diamond = PlayerPrefs.GetInt("Diamond");
         LoadWorkStaion();
-
+        LoadInventory();
 
     }
 
@@ -57,7 +63,6 @@ public class IO_PlayerData : MonoBehaviour
 
         PlayerPrefs.SetString("Time", DateTime.Now.ToString());
         PlayerPrefs.SetInt("CharacterCount", PlayerData.CharacterCount);
-        PlayerPrefs.SetInt("InventoryHeadID", PlayerData.GetInventoryHead());
 
         PlayerPrefs.SetInt("Gold", PlayerData.Gold);
         PlayerPrefs.SetInt("IronOre", PlayerData.IronOre);
@@ -66,7 +71,7 @@ public class IO_PlayerData : MonoBehaviour
         PlayerPrefs.SetInt("Diamond", PlayerData.Diamond);
 
         SaveInventory();
-
+        PlayerPrefs.SetInt("InventoryHeadID", PlayerData.GetInventoryHead());
         PlayerPrefs.Save();
     }
 
@@ -99,16 +104,17 @@ public class IO_PlayerData : MonoBehaviour
     }
 
 
-    private static void SaveInventory()
+    private void SaveInventory()
     {
 
-        for (int i = 0; i < PlayerPrefs.GetInt("InventoryHeadID"); i++)
+        for (int i = 1; i <= PlayerPrefs.GetInt("InventoryHeadID"); i++)
         {
             PlayerPrefs.DeleteKey("SLOT_" + i);
+            
         }
 
 
-        int ID = 0;
+        int ID = 1;
         String ItemID = "";
 
         foreach (Item SingleItem in PlayerData.getWeaponsList())
@@ -116,11 +122,41 @@ public class IO_PlayerData : MonoBehaviour
             if (SingleItem.Information.getID() < 10) ItemID = "00";
             else if (SingleItem.Information.getID() < 100) ItemID = "0";
 
-            
-            
+            String strID = IntToString(SingleItem.Information.getID());
+            String strNumber = SingleItem.Information.Number.ToString();
 
-            PlayerPrefs.SetString("SLOT_" + ID, ItemID);
+            Debug.Log(strID);
+            Debug.Log(strNumber);
+
+            PlayerPrefs.SetString("SLOT_" + ID, strID + strNumber);
             ID++;
+        }
+    }
+
+    private void LoadInventory()
+    {
+        int ID = PlayerPrefs.GetInt("InventoryHeadID");
+        for (int i = 1; i <= ID; i++)
+        {
+            String strItem = PlayerPrefs.GetString("SLOT_" + i);
+
+            String strID = strItem.Substring(0, 3);
+            Debug.Log(strID);
+
+            String strNumber = strItem.Substring(3);
+            Debug.Log(strNumber);
+
+            Item Weapon = WeaponList.WeaponsList[Convert.ToInt32(strID)];
+            Weapon.Information.SetID(Convert.ToInt32(strID));
+            Weapon.Information.Number = Convert.ToInt32(strNumber);
+            Weapon.setSlotID(i);
+
+            Debug.Log("Weapon id:" + Weapon.Information.getID());
+            Debug.Log("Weapon Number" + Weapon.Information.Number);
+
+            PlayerData.AddWeapon(Weapon);
+            Weapon.Information.Number--;
+            
         }
     }
 

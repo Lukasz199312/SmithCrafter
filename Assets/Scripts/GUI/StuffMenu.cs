@@ -10,6 +10,7 @@ public class StuffMenu : MonoBehaviour {
     public Vector2 CelSize;
     public GameObject DialogBox;
     public Canvas MainCanvas;
+    public WeaponCollection WeaponsList;
 
     private int MaxElementVertical;
     private int MaxElementHorizontal;
@@ -22,14 +23,19 @@ public class StuffMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        if (MainCanvas.enabled == false) MainCanvas.enabled = true;
 
+        if (MainCanvas.enabled == false) MainCanvas.enabled = true;
         CalculateMaxElementHorizontal();
         CalculateMaxElementVertical();
         DialogBox.SetActive(false);
         MainCanvas.enabled = false;
 
         DialogBoxScript = DialogBox.GetComponent<DialogBox>();
+
+        for (int i = 1; i <= PlayerData.GetInventoryHead(); i++)
+        {
+            AddToInventory(i);
+        }
 	}
 
     void Awake()
@@ -40,29 +46,61 @@ public class StuffMenu : MonoBehaviour {
 	void Update () {
 	}
 
-    public void AddElement()
+    public void AddToInventory(int i)
     {
-        RectTransform stuffObject = (RectTransform)Resources.Load("stuff", typeof(RectTransform)) as RectTransform;
+        Debug.Log("DATA LENGHT: " + PlayerData.getWeaponsList().ToArray().Length);
+        i = i - 1;
+       Item item =  (Item)PlayerData.getWeaponsList().ToArray().GetValue(i);
+       Debug.Log("StuffMenu Number item: " +  item.Information.Number.ToString() );
 
-        RectTransform Stuff = Instantiate(stuffObject);
-        Stuff.parent = StuffBackground;
+       RectTransform stuffObject = Instantiate(WeaponsList.WeaponsList[item.Information.getID()]).GetComponent<RectTransform>();
 
-        Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox,  Stuff.gameObject));
+       RectTransform Stuff = Instantiate(stuffObject);
+       Stuff.parent = StuffBackground;
 
-        Stuff.sizeDelta = CelSize;
+       Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, item));
 
-        SetPosition(Stuff);
-        Stuff = SetAnchor(Stuff);
 
-        Stuffs.Add(Stuff);
-        CalculatePointer();
+       Stuff.sizeDelta = CelSize;
+
+       SetPosition(Stuff);
+       Stuff = SetAnchor(Stuff);
+
+       Stuffs.Add(Stuff);
+       CalculatePointer();
+
+    }
+
+    public void AddElement(int id)
+    {
 
         Item item = new Item();
         item.Information = new ItemInformation();
-        item.Information.SetID(20);
+        item.Information.SetID(id);
 
-        PlayerData.AddWeapon(item);
+        item = WeaponsList.WeaponsList[id];
+
+        bool result = PlayerData.AddWeapon(item);
+
+        if(result){
+            RectTransform stuffObject = Instantiate(WeaponsList.WeaponsList[item.Information.getID()]).GetComponent<RectTransform>();
+
+            RectTransform Stuff = Instantiate(stuffObject);
+            Stuff.parent = StuffBackground;
+
+            Stuff.sizeDelta = CelSize;
+
+            SetPosition(Stuff);
+            Stuff = SetAnchor(Stuff);
+
+            Stuffs.Add(Stuff);
+            CalculatePointer();
+            Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, item));
+        }
+
+
     }
+
 
 
     private RectTransform SetAnchor(RectTransform t)
@@ -124,12 +162,22 @@ public class StuffMenu : MonoBehaviour {
         }
     }
 
-    public void setDialogBox(GameObject DialogBox, GameObject Stuff)
+    public void setDialogBox(GameObject DialogBox, GameObject Stuff, Item item)
     {
         DialogBox.SetActive(true);
         DialogBoxScript.SelectedItem = Stuff;
         DialogBoxScript.stuffMenu = this;
+
         
+        Debug.Log(Stuff.GetComponent<Image>().sprite.name);
+        DialogBoxScript.IconImage.texture = Stuff.GetComponent<Image>().sprite.texture;
+
+        DialogBoxScript.NameItem.text = "Name: " + item.Information.name;
+        DialogBoxScript.SetDMG(item.Information.MinDMG.ToString(), item.Information.MaxDMG.ToString());
+        DialogBoxScript.Pieces.text = "Pieces: " + item.Information.Number;
+        DialogBoxScript.Price.text = "Price: " + item.Information.SellPrice;
+        DialogBoxScript.item = item;
+       
     }
 
     public void Sell_ALL()

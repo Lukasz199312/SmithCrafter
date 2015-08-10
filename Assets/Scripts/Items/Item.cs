@@ -4,6 +4,7 @@ using System.Collections;
 public class Item : MonoBehaviour {
 
     public ItemInformation Information;
+    private int SlotID;
 
 	// Use this for initialization
 	void Start () {
@@ -15,4 +16,14 @@ public class Item : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public int getSlotID()
+    {
+        return SlotID;
+    }
+
+    public void setSlotID(int id)
+    {
+        SlotID = id;
+    }
 }
