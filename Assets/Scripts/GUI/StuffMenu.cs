@@ -71,15 +71,8 @@ public class StuffMenu : MonoBehaviour {
 
     }
 
-    public void AddElement(int id)
+    public void AddElement(Item item)
     {
-
-        Item item = new Item();
-        item.Information = new ItemInformation();
-        item.Information.SetID(id);
-
-        item = WeaponsList.WeaponsList[id];
-
         bool result = PlayerData.AddWeapon(item);
 
         if(result){

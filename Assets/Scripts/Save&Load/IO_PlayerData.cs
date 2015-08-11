@@ -130,6 +130,8 @@ public class IO_PlayerData : MonoBehaviour
 
             PlayerPrefs.SetString("SLOT_" + ID, strID + strNumber);
             ID++;
+
+            Debug.Log("SAVe ID: " + ID);
         }
     }
 
@@ -171,10 +173,16 @@ public class IO_PlayerData : MonoBehaviour
         return strNumber;
     }
 
+    void OnApplicationPause()
+    {
+       //  Save();
+    }
+
     void OnApplicationQuit()
     {
-         Save();
+        Save();
     }
+  
 }
 
 // SWORD

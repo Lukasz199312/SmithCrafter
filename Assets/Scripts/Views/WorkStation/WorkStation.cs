@@ -18,10 +18,14 @@ public class WorkStation : MonoBehaviour {
     public int Level;
     public float HitPoints;
     public float Speed;
+    public StuffMenu Inventory;
+
+    public Item CraftingItem;
 
     private DateTime Time;
     private const int MaxLevel = 3;
     private StationStatistic Statistic;
+    private float ActualCraftingPoints;
 
     private bool PAUSE = false;
     private DateTime PauseTime = new DateTime();
@@ -45,6 +49,23 @@ public class WorkStation : MonoBehaviour {
         TimeSpan timespan = DateTime.Now - time;
 
         int Frequency = (int)(timespan.TotalSeconds / Statistic.Speed);
+
+
+        int Hits = (int)(timespan.TotalSeconds / Statistic.Speed);
+
+        int craftResult = (int) (Hits * HitPoints ) / CraftingItem.Information.RequireHitPoints;
+        if (craftResult > 0)
+        {
+            for (int i = 0; i < craftResult; i++)
+            {
+                Inventory.AddElement(CraftingItem);
+                ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+            }
+        }
+        else
+        {
+            ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+        }
 
        // Debug.Log("Time span " + timespan.TotalSeconds);
        // Debug.Log("Frequency:" + Frequency);
@@ -70,22 +91,29 @@ public class WorkStation : MonoBehaviour {
 
         if (Time.AddSeconds(Statistic.Speed) < DateTime.Now)
         {
-            PlayerData.Gold = PlayerData.Gold + 25;
-            PlayerData.UpdateResources();
+            ActualCraftingPoints = ActualCraftingPoints + 25;
+            if (ActualCraftingPoints >= CraftingItem.Information.RequireHitPoints)
+            {
+                Inventory.AddElement(CraftingItem);
+                ActualCraftingPoints = 0;
+            }
+
+           // PlayerData.Gold = PlayerData.Gold + 25;
+            //PlayerData.UpdateResources();
 
             Time = DateTime.Now;
         }
 	}
 
-
+    
 
 
     void OnApplicationPause()
     {
         if (PAUSE == false)
         {
-            PAUSE = true;
-            PauseTime = DateTime.Now;
+           // PAUSE = true;
+           // PauseTime = DateTime.Now;
 
         }
 
