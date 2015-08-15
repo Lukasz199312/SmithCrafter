@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
-public class ItemInformation : MonoBehaviour
+public class ItemInformation : MonoBehaviour, ICloneable
 {
     public string ItemName;
     public int MinDMG;
@@ -35,5 +36,10 @@ public class ItemInformation : MonoBehaviour
     public int getID()
     {
         return ITEM_ID;
+    }
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
     }
 }

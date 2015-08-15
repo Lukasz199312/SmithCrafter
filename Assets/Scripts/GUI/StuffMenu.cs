@@ -48,18 +48,20 @@ public class StuffMenu : MonoBehaviour {
 
     public void AddToInventory(int i)
     {
-        Debug.Log("DATA LENGHT: " + PlayerData.getWeaponsList().ToArray().Length);
-        i = i - 1;
+       Debug.Log("DATA LENGHT: " + PlayerData.getWeaponsList().ToArray().Length);
+       i = i - 1;
        Item item =  (Item)PlayerData.getWeaponsList().ToArray().GetValue(i);
        Debug.Log("StuffMenu Number item: " +  item.Information.Number.ToString() );
 
-       RectTransform stuffObject = Instantiate(WeaponsList.WeaponsList[item.Information.getID()]).GetComponent<RectTransform>();
+       RectTransform stuffObject = Instantiate<RectTransform>(WeaponsList.WeaponsList[item.Information.getID()].GetComponent<RectTransform>() );
 
        RectTransform Stuff = Instantiate(stuffObject);
        Stuff.parent = StuffBackground;
 
        Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, item));
 
+       Item newItem = Stuff.GetComponent<Item>();
+       newItem = item;
 
        Stuff.sizeDelta = CelSize;
 
@@ -71,14 +73,21 @@ public class StuffMenu : MonoBehaviour {
 
     }
 
-    public void AddElement(Item item)
+    public void AddElement(Item _item)
     {
-        bool result = PlayerData.AddWeapon(item);
+       
+        RectTransform stuffObject = Instantiate<RectTransform>(WeaponsList.WeaponsList[_item.Information.getID()].GetComponent<RectTransform>());
+       Item newitem = stuffObject.GetComponent<Item>();
+       bool result = PlayerData.AddWeapon(newitem);
 
         if(result){
-            RectTransform stuffObject = Instantiate(WeaponsList.WeaponsList[item.Information.getID()]).GetComponent<RectTransform>();
+           
 
-            RectTransform Stuff = Instantiate(stuffObject);
+           
+
+            if (object.Equals(newitem, stuffObject.GetComponent<Item>())) Debug.Log("***************************");
+
+            RectTransform Stuff = stuffObject;
             Stuff.parent = StuffBackground;
 
             Stuff.sizeDelta = CelSize;
@@ -88,9 +97,11 @@ public class StuffMenu : MonoBehaviour {
 
             Stuffs.Add(Stuff);
             CalculatePointer();
-            Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, item));
+            Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, newitem));
+            return;
         }
 
+       // Destroy(stuffObject.gameObject);
 
     }
 

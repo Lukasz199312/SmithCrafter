@@ -26,6 +26,10 @@ public class DialogBox : MonoBehaviour {
 
     public void Sell_Stuff()
     {
+
+        Debug.Log("Sell test");
+
+
         Debug.Log(stuffMenu.transform.GetChild(0).childCount);
         this.gameObject.SetActive(false);
         SelectedItem.transform.parent = null;
@@ -33,8 +37,12 @@ public class DialogBox : MonoBehaviour {
         stuffMenu.Sort();
         PlayerData.Gold = PlayerData.Gold  + (item.Information.SellPrice * item.Information.Number);
         PlayerData.UpdateResources();
-        Debug.Log(PlayerData.Gold);
+        Debug.Log("Item ID DELETED:" + item.getSlotID() );
         PlayerData.RemoveSlot(item.getSlotID());
+        PlayerData.getWeaponsList().Sort();
+        item.Information.Number = 0;
+
+        PlayerData.SortSlots();
     }
 
     public void SetDMG(string MIN, string Max)

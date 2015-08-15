@@ -128,10 +128,8 @@ public class IO_PlayerData : MonoBehaviour
             Debug.Log(strID);
             Debug.Log(strNumber);
 
-            PlayerPrefs.SetString("SLOT_" + ID, strID + strNumber);
             ID++;
 
-            Debug.Log("SAVe ID: " + ID);
         }
     }
 
@@ -148,13 +146,10 @@ public class IO_PlayerData : MonoBehaviour
             String strNumber = strItem.Substring(3);
             Debug.Log(strNumber);
 
-            Item Weapon = WeaponList.WeaponsList[Convert.ToInt32(strID)];
+            Item Weapon = (Item) WeaponList.WeaponsList[Convert.ToInt32(strID)].Clone();
             Weapon.Information.SetID(Convert.ToInt32(strID));
             Weapon.Information.Number = Convert.ToInt32(strNumber);
             Weapon.setSlotID(i);
-
-            Debug.Log("Weapon id:" + Weapon.Information.getID());
-            Debug.Log("Weapon Number" + Weapon.Information.Number);
 
             PlayerData.AddWeapon(Weapon);
             Weapon.Information.Number--;
@@ -175,7 +170,7 @@ public class IO_PlayerData : MonoBehaviour
 
     void OnApplicationPause()
     {
-       //  Save();
+         Save();
     }
 
     void OnApplicationQuit()

@@ -59,8 +59,9 @@ public class WorkStation : MonoBehaviour {
             for (int i = 0; i < craftResult; i++)
             {
                 Inventory.AddElement(CraftingItem);
-                ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
             }
+
+            ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
         }
         else
         {
@@ -81,17 +82,32 @@ public class WorkStation : MonoBehaviour {
         {
             PAUSE = false;
 
-
             TimeSpan timespan = DateTime.Now - PauseTime;
 
             int Frequency = (int)(timespan.TotalSeconds / Statistic.Speed);
 
-            PlayerData.Gold = PlayerData.Gold + (25 * Frequency);
+
+            int Hits = (int)(timespan.TotalSeconds / Statistic.Speed);
+
+            int craftResult = (int)(Hits * HitPoints) / CraftingItem.Information.RequireHitPoints;
+            if (craftResult > 0)
+            {
+                for (int i = 0; i < craftResult; i++)
+                {
+                    Inventory.AddElement(CraftingItem);
+                }
+
+                ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+            }
+            else
+            {
+                ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+            }
         }
 
         if (Time.AddSeconds(Statistic.Speed) < DateTime.Now)
         {
-            ActualCraftingPoints = ActualCraftingPoints + 25;
+            ActualCraftingPoints = ActualCraftingPoints + HitPoints;
             if (ActualCraftingPoints >= CraftingItem.Information.RequireHitPoints)
             {
                 Inventory.AddElement(CraftingItem);
@@ -112,8 +128,8 @@ public class WorkStation : MonoBehaviour {
     {
         if (PAUSE == false)
         {
-           // PAUSE = true;
-           // PauseTime = DateTime.Now;
+            PAUSE = true;
+            PauseTime = DateTime.Now;
 
         }
 
