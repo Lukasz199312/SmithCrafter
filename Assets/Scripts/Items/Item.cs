@@ -1,21 +1,16 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System;
 
 public class Item : MonoBehaviour, ICloneable {
 
     public ItemInformation Information;
-
-    private Image ItemImage;
-    public int SlotID;
+    private int SlotID;
 
 	// Use this for initialization
 	void Start () {
        // Information = GetComponent<ItemInformation>();
         if (Information == null) Information = new ItemInformation();
-
-        ItemImage = gameObject.GetComponent<Image>();
 	}
 	
 	// Update is called once per frame
@@ -33,23 +28,17 @@ public class Item : MonoBehaviour, ICloneable {
         SlotID = id;
     }
 
-    public Sprite getSprite()
-    {
-        return this.ItemImage.sprite;
-    }
-
     public object Clone()
     {
-        Item newItem = (Item)this.MemberwiseClone();
-        newItem.Information = (ItemInformation)Information.Clone();
+        Item newItem = (Item) this.MemberwiseClone();
+        newItem.Information = (ItemInformation) this.Information.Clone();
 
         return newItem;
+
     }
 
-    public void SetReference(Item item)
+    public static void CopyReference(object A, object B)
     {
-        Information = item.Information;
-        ItemImage = item.ItemImage;
-        SlotID = item.SlotID;
+        A = B;
     }
 }

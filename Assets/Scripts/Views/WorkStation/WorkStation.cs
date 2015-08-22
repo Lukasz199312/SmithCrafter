@@ -2,9 +2,10 @@
 using System.Collections;
 using System;
 
-public class WorkStation : MonoBehaviour {
+public class WorkStation : MonoBehaviour
+{
 
-    public enum Mode:int
+    public enum Mode : int
     {
         ACTIVE = 2,
         BUSY = 1,
@@ -18,7 +19,8 @@ public class WorkStation : MonoBehaviour {
     public int Level;
     public float HitPoints;
     public float Speed;
-    public StuffMenu Inventory;
+    public Inventory Inventory;
+    public StuffMenu stuffMenu;
 
     public Item CraftingItem;
 
@@ -30,8 +32,9 @@ public class WorkStation : MonoBehaviour {
     private bool PAUSE = false;
     private DateTime PauseTime = new DateTime();
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
 
         Time = DateTime.Now;
 
@@ -41,7 +44,7 @@ public class WorkStation : MonoBehaviour {
         Statistic.HitPoints = this.HitPoints;
         Statistic.Speed = this.Speed;
 
-       // TimeSpan timespan = DateTime.Now - DateTime.Parse(PlayerData.Time);
+        // TimeSpan timespan = DateTime.Now - DateTime.Parse(PlayerData.Time);
         if (mode == Mode.TO_SELL) return;
         DateTime time = new DateTime();
         time = DateTime.Parse(PlayerData.Time);
@@ -53,12 +56,13 @@ public class WorkStation : MonoBehaviour {
 
         int Hits = (int)(timespan.TotalSeconds / Statistic.Speed);
 
-        int craftResult = (int) (Hits * HitPoints ) / CraftingItem.Information.RequireHitPoints;
+        int craftResult = (int)(Hits * HitPoints) / CraftingItem.Information.RequireHitPoints;
         if (craftResult > 0)
         {
             for (int i = 0; i < craftResult; i++)
             {
-                Inventory.AddElement(CraftingItem);
+                stuffMenu.AddElement(CraftingItem);
+
             }
 
             ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
@@ -68,14 +72,15 @@ public class WorkStation : MonoBehaviour {
             ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
         }
 
-       // Debug.Log("Time span " + timespan.TotalSeconds);
-       // Debug.Log("Frequency:" + Frequency);
+        // Debug.Log("Time span " + timespan.TotalSeconds);
+        // Debug.Log("Frequency:" + Frequency);
 
         PlayerData.Gold = PlayerData.Gold + (25 * Frequency);
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (mode == Mode.TO_SELL) return;
 
         if (PAUSE == true)
@@ -94,7 +99,7 @@ public class WorkStation : MonoBehaviour {
             {
                 for (int i = 0; i < craftResult; i++)
                 {
-                    Inventory.AddElement(CraftingItem);
+                    stuffMenu.AddElement(CraftingItem);
                 }
 
                 ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
@@ -110,18 +115,20 @@ public class WorkStation : MonoBehaviour {
             ActualCraftingPoints = ActualCraftingPoints + HitPoints;
             if (ActualCraftingPoints >= CraftingItem.Information.RequireHitPoints)
             {
-                Inventory.AddElement(CraftingItem);
+                stuffMenu.AddElement(CraftingItem);
+
+
                 ActualCraftingPoints = 0;
             }
 
-           // PlayerData.Gold = PlayerData.Gold + 25;
+            // PlayerData.Gold = PlayerData.Gold + 25;
             //PlayerData.UpdateResources();
 
             Time = DateTime.Now;
         }
-	}
+    }
 
-    
+
 
 
     void OnApplicationPause()

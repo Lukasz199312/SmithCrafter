@@ -9,6 +9,7 @@ public class IO_PlayerData : MonoBehaviour
     public int NumberWorkstation;
     public ViewsManager _ViewManager;
     public WeaponCollection WeaponList;
+    public Inventory inventory;
 
     // Use this for initialization
     void Awake()
@@ -71,7 +72,7 @@ public class IO_PlayerData : MonoBehaviour
         PlayerPrefs.SetInt("Diamond", PlayerData.Diamond);
 
         SaveInventory();
-        PlayerPrefs.SetInt("InventoryHeadID", PlayerData.GetInventoryHead());
+        PlayerPrefs.SetInt("InventoryHeadID", inventory.InventoryHeadID );
         PlayerPrefs.Save();
     }
 
@@ -104,7 +105,7 @@ public class IO_PlayerData : MonoBehaviour
     }
 
 
-    private void SaveInventory()
+    private void SaveInventory_OLD()
     {
 
         for (int i = 1; i <= PlayerPrefs.GetInt("InventoryHeadID"); i++)
@@ -128,8 +129,41 @@ public class IO_PlayerData : MonoBehaviour
             Debug.Log(strID);
             Debug.Log(strNumber);
 
+            PlayerPrefs.SetString("SLOT_" + ID, strID + strNumber);
             ID++;
 
+            Debug.Log("SAVe ID: " + ID);
+        }
+    }
+
+    private void SaveInventory()
+    {
+
+        for (int i = 1; i <= inventory.InventoryHeadID; i++)
+        {
+            PlayerPrefs.DeleteKey("SLOT_" + i);
+
+        }
+
+
+        int ID = 1;
+        String ItemID = "";
+
+        foreach (Item SingleItem in inventory.WeaponsList)
+        {
+            if (SingleItem.Information.getID() < 10) ItemID = "00";
+            else if (SingleItem.Information.getID() < 100) ItemID = "0";
+
+            String strID = IntToString(SingleItem.Information.getID());
+            String strNumber = SingleItem.Information.Number.ToString();
+
+            Debug.Log(strID);
+            Debug.Log(strNumber);
+
+            PlayerPrefs.SetString("SLOT_" + ID, strID + strNumber);
+            ID++;
+
+            Debug.Log("SAVe ID: " + ID);
         }
     }
 
@@ -147,13 +181,46 @@ public class IO_PlayerData : MonoBehaviour
             Debug.Log(strNumber);
 
             Item Weapon = (Item) WeaponList.WeaponsList[Convert.ToInt32(strID)].Clone();
+
             Weapon.Information.SetID(Convert.ToInt32(strID));
             Weapon.Information.Number = Convert.ToInt32(strNumber);
             Weapon.setSlotID(i);
 
-            PlayerData.AddWeapon(Weapon);
+            Debug.Log("Weapon id:" + Weapon.Information.getID());
+            Debug.Log("Weapon Number" + Weapon.Information.Number);
+
+            inventory.Add(ref Weapon);
             Weapon.Information.Number--;
             
+        }
+    }
+
+
+    private void LoadInventory_OLD()
+    {
+        int ID = PlayerPrefs.GetInt("InventoryHeadID");
+        for (int i = 1; i <= ID; i++)
+        {
+            String strItem = PlayerPrefs.GetString("SLOT_" + i);
+
+            String strID = strItem.Substring(0, 3);
+            Debug.Log(strID);
+
+            String strNumber = strItem.Substring(3);
+            Debug.Log(strNumber);
+
+            Item Weapon = (Item)WeaponList.WeaponsList[Convert.ToInt32(strID)].Clone();
+
+            Weapon.Information.SetID(Convert.ToInt32(strID));
+            Weapon.Information.Number = Convert.ToInt32(strNumber);
+            Weapon.setSlotID(i);
+
+            Debug.Log("Weapon id:" + Weapon.Information.getID());
+            Debug.Log("Weapon Number" + Weapon.Information.Number);
+
+            PlayerData.AddWeapon(Weapon);
+            Weapon.Information.Number--;
+
         }
     }
 
@@ -170,7 +237,7 @@ public class IO_PlayerData : MonoBehaviour
 
     void OnApplicationPause()
     {
-         Save();
+       //  Save();
     }
 
     void OnApplicationQuit()

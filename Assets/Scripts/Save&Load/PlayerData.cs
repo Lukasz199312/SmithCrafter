@@ -50,16 +50,19 @@ public class PlayerData : MonoBehaviour {
         {
             if (weapon.Information.getID() == item.Information.getID())
             {
-
                 weapon.setSlotID(InventoryHeadID);
                 weapon.Information.Number++;
+                Debug.Log("Zwieszkono ilosc itemu");
                 return false;
             }
         }
+
+        Item newItem = (Item)item.Clone();
+
         InventoryHeadID++;
-        item.Information.Number++;
-        item.setSlotID(InventoryHeadID);
-        Weapons.Add(item);
+        newItem.Information.Number++;
+        newItem.setSlotID(InventoryHeadID);
+        Weapons.Add(newItem);
         Debug.Log("dodano nowy slot");
         return true;
 
@@ -93,7 +96,6 @@ public class PlayerData : MonoBehaviour {
     public static void RemoveSlot(int id)
     {
         Debug.Log("PRZED: " + Weapons.ToArray().Length);
-        Debug.Log("INDEX TO DELETE: " + (id -1).ToString() );
         Weapons.RemoveAt(id-1);
         Debug.Log("PO: " + Weapons.ToArray().Length);
         DecreaseInventoryHead();
@@ -102,18 +104,27 @@ public class PlayerData : MonoBehaviour {
     public static void SortSlots()
     {
         int id = 1;
-
-        foreach (Item item in Weapons)
-        {
-            Debug.Log(" Before SORT ITEM ID:" + id);
-        }
-
         foreach(Item item in Weapons)
         {
             item.setSlotID(id);
-            Debug.Log(" After SORT ITEM ID:" + id);
             id++;
         }
+    }
+
+    public static bool isSlotExist(Item item)
+    {
+        foreach (Item weapon in Weapons)
+        {
+            if (weapon.Information.getID() == item.Information.getID())
+            {
+                weapon.setSlotID(InventoryHeadID);
+                weapon.Information.Number++;
+                Debug.Log("Zwieszkono ilosc itemu");
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

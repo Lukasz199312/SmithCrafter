@@ -11,6 +11,7 @@ public class StuffMenu : MonoBehaviour {
     public GameObject DialogBox;
     public Canvas MainCanvas;
     public WeaponCollection WeaponsList;
+    public Inventory inventory;
 
     private int MaxElementVertical;
     private int MaxElementHorizontal;
@@ -23,7 +24,6 @@ public class StuffMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-
         if (MainCanvas.enabled == false) MainCanvas.enabled = true;
         CalculateMaxElementHorizontal();
         CalculateMaxElementVertical();
@@ -31,11 +31,10 @@ public class StuffMenu : MonoBehaviour {
         MainCanvas.enabled = false;
 
         DialogBoxScript = DialogBox.GetComponent<DialogBox>();
+        AddToBackpack();
 
-        for (int i = 1; i <= PlayerData.GetInventoryHead(); i++)
-        {
-            AddToInventory(i);
-        }
+
+
 	}
 
     void Awake()
@@ -46,49 +45,45 @@ public class StuffMenu : MonoBehaviour {
 	void Update () {
 	}
 
-    public void AddToInventory(int i)
+    private void AddToBackpack()
     {
-       Debug.Log("DATA LENGHT: " + PlayerData.getWeaponsList().ToArray().Length);
-       i = i - 1;
-       Item item =  (Item)PlayerData.getWeaponsList().ToArray().GetValue(i);
+
+       Debug.Log("DATA LENGHT: " + WeaponsList.WeaponsList.Length);
+        int Slot_ID = 0;
+
+       IEnumerator enumerator = inventory.WeaponsList.GetEnumerator();
+       while (enumerator.MoveNext())
+       {
+           Item item = (Item)enumerator.Current;
+
+
+
+           IEnumerator enumerator1 = inventory.WeaponsList.GetEnumerator();
+           while (enumerator1.MoveNext())
+           {
+               object obj = enumerator1.Current;
+
+               if (object.ReferenceEquals(obj, item)) Debug.Log("****************");
+           }
+
+
+      // item = (Item)PlayerData.getWeaponsList().ToArray().GetValue(Slot_ID);
        Debug.Log("StuffMenu Number item: " +  item.Information.Number.ToString() );
 
-       RectTransform stuffObject = Instantiate<RectTransform>(WeaponsList.WeaponsList[item.Information.getID()].GetComponent<RectTransform>() );
+       bool result = inventory.isSlotExist(item);
 
-       RectTransform Stuff = Instantiate(stuffObject);
-       Stuff.parent = StuffBackground;
+        if(result)
+        {
+            RectTransform stuffObject = Instantiate(WeaponsList.WeaponsList[item.Information.getID()]).GetComponent<RectTransform>();
 
-       Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, item));
+            RectTransform Stuff = Instantiate(stuffObject);
 
-       Item newItem = Stuff.GetComponent<Item>();
-       newItem = item;
+            Stuff.GetComponent<Item>().Information = item.Information;
 
-       Stuff.sizeDelta = CelSize;
-
-       SetPosition(Stuff);
-       Stuff = SetAnchor(Stuff);
-
-       Stuffs.Add(Stuff);
-       CalculatePointer();
-
-    }
-
-    public void AddElement(Item _item)
-    {
-       
-        RectTransform stuffObject = Instantiate<RectTransform>(WeaponsList.WeaponsList[_item.Information.getID()].GetComponent<RectTransform>());
-       Item newitem = stuffObject.GetComponent<Item>();
-       bool result = PlayerData.AddWeapon(newitem);
-
-        if(result){
-           
-
-           
-
-            if (object.Equals(newitem, stuffObject.GetComponent<Item>())) Debug.Log("***************************");
-
-            RectTransform Stuff = stuffObject;
             Stuff.parent = StuffBackground;
+
+            Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, ref item));
+
 
             Stuff.sizeDelta = CelSize;
 
@@ -97,11 +92,47 @@ public class StuffMenu : MonoBehaviour {
 
             Stuffs.Add(Stuff);
             CalculatePointer();
-            Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, newitem));
-            return;
+        } else
+        {
+            item.Information.Number++;
         }
 
-       // Destroy(stuffObject.gameObject);
+        Slot_ID++;
+       }
+    }
+    
+
+    public void AddElement(Item item)
+    {
+       bool result =  inventory.Add(ref item);
+
+        if (result)
+        {
+
+            IEnumerator enumerator = inventory.WeaponsList.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (object.ReferenceEquals(item, enumerator.Current))
+                    Debug.Log("KURWAAAAAAAAAAAAAAAAA****************");
+            }
+
+            RectTransform Stuff = Instantiate < RectTransform > (item.GetComponent<RectTransform>());
+
+            Stuff.parent = StuffBackground;
+
+            Stuff.GetComponent<Button>().onClick.AddListener(() => setDialogBox(DialogBox, Stuff.gameObject, ref item));
+
+
+            Stuff.sizeDelta = CelSize;
+
+            SetPosition(Stuff);
+            Stuff = SetAnchor(Stuff);
+
+            Stuffs.Add(Stuff);
+            CalculatePointer();
+        }
+
+
 
     }
 
@@ -166,14 +197,14 @@ public class StuffMenu : MonoBehaviour {
         }
     }
 
-    public void setDialogBox(GameObject DialogBox, GameObject Stuff, Item item)
+    public void setDialogBox(GameObject DialogBox, GameObject Stuff, ref Item item)
     {
         DialogBox.SetActive(true);
         DialogBoxScript.SelectedItem = Stuff;
         DialogBoxScript.stuffMenu = this;
 
         
-        Debug.Log(Stuff.GetComponent<Image>().sprite.name);
+     //   Debug.Log(Stuff.GetComponent<Image>().sprite.name);
         DialogBoxScript.IconImage.texture = Stuff.GetComponent<Image>().sprite.texture;
 
         DialogBoxScript.NameItem.text = "Name: " + item.Information.name;
@@ -181,6 +212,15 @@ public class StuffMenu : MonoBehaviour {
         DialogBoxScript.Pieces.text = "Pieces: " + item.Information.Number;
         DialogBoxScript.Price.text = "Price: " + item.Information.SellPrice;
         DialogBoxScript.item = item;
+
+        IEnumerator enumerator1 = inventory.WeaponsList.GetEnumerator();
+        enumerator1.Reset();
+        while (enumerator1.MoveNext())
+        {
+             object obj = enumerator1.Current;
+            
+            if (object.ReferenceEquals(DialogBoxScript.item, obj)) Debug.Log("DIALOG BOX REFERENCE [2] ****************");
+        }
        
     }
 
