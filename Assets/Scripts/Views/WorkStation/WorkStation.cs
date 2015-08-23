@@ -76,7 +76,7 @@ public class WorkStation : MonoBehaviour
         // Debug.Log("Time span " + timespan.TotalSeconds);
         // Debug.Log("Frequency:" + Frequency);
 
-        PlayerData.Gold = PlayerData.Gold + (25 * Frequency);
+        //PlayerData.Gold = PlayerData.Gold + (25 * Frequency);
     }
 
     // Update is called once per frame

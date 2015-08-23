@@ -66,6 +66,7 @@ public class IO_PlayerData : MonoBehaviour
         PlayerPrefs.SetInt("CharacterCount", PlayerData.CharacterCount);
 
         PlayerPrefs.SetInt("Gold", PlayerData.Gold);
+        Debug.Log("SAVE GOLD ****** " + PlayerData.Gold + " *******");
         PlayerPrefs.SetInt("IronOre", PlayerData.IronOre);
         PlayerPrefs.SetInt("SilverOre", PlayerData.SilverOre);
         PlayerPrefs.SetInt("GoldOre", PlayerData.GoldOre);
