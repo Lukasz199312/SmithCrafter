@@ -22,7 +22,6 @@ public class TouchAction : MonoBehaviour {
 
         foreach (Touch touch in Input.touches)
         {
-
             if (Swap.Enabled)
             {
                 Swap.setPhase(touch);

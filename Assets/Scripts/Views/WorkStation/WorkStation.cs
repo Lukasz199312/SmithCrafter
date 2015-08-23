@@ -36,13 +36,9 @@ public class WorkStation : MonoBehaviour
     void Start()
     {
 
+        Statistic = new StationStatistic(HitPoints, Speed, Level, ActualCraftingPoints);
+
         Time = DateTime.Now;
-
-        Statistic = new StationStatistic();
-
-        Statistic.Level = this.Level;
-        Statistic.HitPoints = this.HitPoints;
-        Statistic.Speed = this.Speed;
 
         // TimeSpan timespan = DateTime.Now - DateTime.Parse(PlayerData.Time);
         if (mode == Mode.TO_SELL) return;
@@ -65,12 +61,14 @@ public class WorkStation : MonoBehaviour
 
 
             ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+            Statistic = new StationStatistic(HitPoints, Speed, Level, ActualCraftingPoints);
 
             CraftingItem.Information.Number = 1;
         }
         else
         {
             ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+            Statistic = new StationStatistic(HitPoints, Speed, Level, ActualCraftingPoints);
         }
 
         // Debug.Log("Time span " + timespan.TotalSeconds);
@@ -129,6 +127,11 @@ public class WorkStation : MonoBehaviour
         }
     }
 
+
+    public StationStatistic getStatistic()
+    {
+        return Statistic;
+    }
 
 
 

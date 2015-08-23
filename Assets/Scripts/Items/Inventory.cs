@@ -31,7 +31,7 @@ public class Inventory : MonoBehaviour {
                 weapon.Information.Number = weapon.Information.Number + item.Information.Number;
 
 
-                Debug.Log("Zwieszkono ilosc itemu *********");
+               // Debug.Log("Zwieszkono ilosc itemu *********");
                 return false;
             }
         }
