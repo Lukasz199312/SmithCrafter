@@ -28,7 +28,7 @@ public class Inventory : MonoBehaviour {
             if (weapon.Information.getID() == item.Information.getID())
             {
               //  weapon.setSlotID(InventoryHeadID);
-                weapon.Information.Number++;
+                weapon.Information.Number = weapon.Information.Number + item.Information.Number;
 
 
                 Debug.Log("Zwieszkono ilosc itemu *********");

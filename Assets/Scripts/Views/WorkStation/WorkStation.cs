@@ -59,13 +59,14 @@ public class WorkStation : MonoBehaviour
         int craftResult = (int)(Hits * HitPoints) / CraftingItem.Information.RequireHitPoints;
         if (craftResult > 0)
         {
-            for (int i = 0; i < craftResult; i++)
-            {
-                stuffMenu.AddElement(CraftingItem);
 
-            }
+            CraftingItem.Information.Number = CraftingItem.Information.Number + craftResult;
+            stuffMenu.AddElement(CraftingItem);
+
 
             ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+
+            CraftingItem.Information.Number = 1;
         }
         else
         {
