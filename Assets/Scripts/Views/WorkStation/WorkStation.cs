@@ -32,12 +32,23 @@ public class WorkStation : MonoBehaviour
     private bool PAUSE = false;
     private DateTime PauseTime = new DateTime();
 
+    public BoxCollider2D _boxCollider2D{ get; set; }
+    public SpriteRenderer _SpriteRender { get; set; }
+  
+    void Awake()
+    {
+        _boxCollider2D = GetComponent<BoxCollider2D>();
+        _SpriteRender = GetComponent<SpriteRenderer>();
+
+
+        Statistic = new StationStatistic(HitPoints, Speed, Level, ActualCraftingPoints);
+    }
+
     // Use this for initialization
     void Start()
     {
 
-        Statistic = new StationStatistic(HitPoints, Speed, Level, ActualCraftingPoints);
-
+     
         Time = DateTime.Now;
 
         // TimeSpan timespan = DateTime.Now - DateTime.Parse(PlayerData.Time);

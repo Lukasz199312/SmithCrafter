@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StationStatistic {
+public class StationStatistic : MonoBehaviour{
 
     public float HitPoints { get; private set; }
     public float Speed { get; private set; }

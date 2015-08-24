@@ -27,6 +27,7 @@ namespace Assets.Scripts.Views
 
         private void SetWorkStationMode(ViewInformation.ViewType type, WorkStation SingleWorkStation)
         {
+            CopyValues Copy = new CopyValues();
             switch (type)
             {
                 case ViewInformation.ViewType.CRAFT_VIEW:
@@ -34,17 +35,25 @@ namespace Assets.Scripts.Views
                     switch (SingleWorkStation.mode)
                     {
                         case global::WorkStation.Mode.TO_SELL:
-                            Worker = Instantiate(WorkStation, SingleWorkStation.transform.position, Quaternion.identity) as GameObject;
+
+                            Copy.CopyScale(SingleWorkStation.transform, WorkStation.transform, transform);
+                            Copy.CopySpriteRender(SingleWorkStation._SpriteRender, WorkStation.GetComponent<SpriteRenderer>());
+                            Copy.CopyBoxCollider2D(SingleWorkStation._boxCollider2D, WorkStation.GetComponent<BoxCollider2D>());
+                            
                             break;
 
                         case global::WorkStation.Mode.ACTIVE:
-                            Worker = Instantiate(WorkerObject, SingleWorkStation.transform.position, Quaternion.identity) as GameObject;
+                            
+                            Copy.CopyScale(SingleWorkStation.transform, WorkerObject.transform, transform);
+                            Copy.CopySpriteRender(SingleWorkStation._SpriteRender, WorkerObject.GetComponent<SpriteRenderer>());
+                            Copy.CopyBoxCollider2D(SingleWorkStation._boxCollider2D, WorkerObject.GetComponent<BoxCollider2D>());
+
                             break;
                     }
-                    Worker.transform.parent = this.transform;
                     break;
             }
         }
+
 
     }
 }
