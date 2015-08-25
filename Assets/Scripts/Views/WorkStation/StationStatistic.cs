@@ -8,6 +8,7 @@ public class StationStatistic : MonoBehaviour{
     public int Level { get; private set; }
     public float ActualHitPoints { get; private set; }
 
+
     public StationStatistic(float HitPoints, float Speed, int Level, float ActualHitPoints)
     {
         this.HitPoints = HitPoints;
@@ -16,7 +17,7 @@ public class StationStatistic : MonoBehaviour{
         this.ActualHitPoints = ActualHitPoints;
     }
 
-    public void setActualHitPoints(float ActialHitPoints)
+    public void setActualHitPoints(float ActualHitPoints)
     {
         this.ActualHitPoints = ActualHitPoints;
     }

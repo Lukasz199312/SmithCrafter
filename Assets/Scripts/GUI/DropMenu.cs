@@ -61,6 +61,7 @@ public class DropMenu : MonoBehaviour {
                _ViewsManager.Touch_Action.Swap.Enabled = true;
             }
         }
+
     }
 
     public void ToggleOffMenu()
@@ -76,6 +77,16 @@ public class DropMenu : MonoBehaviour {
         }
     }
 
-    
-    
+    //------------------------------------------
+
+    public void ShowMenu(AboutWorker WorkerInformation)
+    {
+        WorkStation Worker = SelectedObject.GetComponent<WorkStation>();
+
+        WorkerInformation.ToggleOn(Worker, Worker.CraftingItem);
+
+        Debug.Log(Worker.CraftingItem.Information.RequireHitPoints);
+    }
+
+    //------------------------------------------
 }

@@ -47,7 +47,7 @@ public class WorkStation : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        Statistic = new StationStatistic(HitPoints, Speed, Level, 0);
      
         Time = DateTime.Now;
 
@@ -72,14 +72,14 @@ public class WorkStation : MonoBehaviour
 
 
             ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
-            Statistic = new StationStatistic(HitPoints, Speed, Level, ActualCraftingPoints);
+           
 
             CraftingItem.Information.Number = 1;
         }
         else
         {
             ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
-            Statistic = new StationStatistic(HitPoints, Speed, Level, ActualCraftingPoints);
+
         }
 
         // Debug.Log("Time span " + timespan.TotalSeconds);
@@ -91,6 +91,7 @@ public class WorkStation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (mode == Mode.TO_SELL) return;
 
         if (PAUSE == true)
@@ -113,16 +114,20 @@ public class WorkStation : MonoBehaviour
                 }
 
                 ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+                Statistic.setActualHitPoints(ActualCraftingPoints);
             }
             else
             {
                 ActualCraftingPoints = ActualCraftingPoints + (Hits * HitPoints % CraftingItem.Information.RequireHitPoints);
+                Statistic.setActualHitPoints(ActualCraftingPoints);
             }
         }
 
         if (Time.AddSeconds(Statistic.Speed) < DateTime.Now)
         {
             ActualCraftingPoints = ActualCraftingPoints + HitPoints;
+            Statistic.setActualHitPoints(ActualCraftingPoints);
+
             if (ActualCraftingPoints >= CraftingItem.Information.RequireHitPoints)
             {
                 stuffMenu.AddElement(CraftingItem);

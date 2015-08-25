@@ -8,6 +8,7 @@ public class LockView : MonoBehaviour {
     public GameObject BuyViewPanel;
     private View[] Views;
 	// Use this for initialization
+
 	void Start () {
         Views = new View[ViewManager.Views.Length];
 
