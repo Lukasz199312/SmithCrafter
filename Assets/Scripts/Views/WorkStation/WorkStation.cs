@@ -34,6 +34,9 @@ public class WorkStation : MonoBehaviour
 
     public BoxCollider2D _boxCollider2D{ get; set; }
     public SpriteRenderer _SpriteRender { get; set; }
+
+
+    private const int PartTime = 10;
   
     void Awake()
     {
@@ -123,9 +126,9 @@ public class WorkStation : MonoBehaviour
             }
         }
 
-        if (Time.AddSeconds(Statistic.Speed) < DateTime.Now)
+        if (Time.AddSeconds(Statistic.Speed / PartTime) < DateTime.Now)
         {
-            ActualCraftingPoints = ActualCraftingPoints + HitPoints;
+            ActualCraftingPoints = ActualCraftingPoints + (HitPoints / PartTime);
             Statistic.setActualHitPoints(ActualCraftingPoints);
 
             if (ActualCraftingPoints >= CraftingItem.Information.RequireHitPoints)

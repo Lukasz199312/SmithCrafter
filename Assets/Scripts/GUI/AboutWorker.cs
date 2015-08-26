@@ -16,6 +16,7 @@ public class AboutWorker : MonoBehaviour {
     private Item item;
     private float StartPosition;
 
+
 	// Use this for initialization
 	void Start () {
         StartPosition = ProgressBar.anchoredPosition.x;
@@ -25,7 +26,7 @@ public class AboutWorker : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Progress.text = Statistic.ActualHitPoints.ToString();
+        Progress.text = ((int)Statistic.ActualHitPoints).ToString();
         CalculateProgressBar();
         
 	}
@@ -46,6 +47,9 @@ public class AboutWorker : MonoBehaviour {
     private void CalculateProgressBar()
     {
         float PercentGoal = Statistic.ActualHitPoints / item.Information.RequireHitPoints;
+
+        if (PercentGoal >= 1) PercentGoal = 1;
+
         Debug.Log(PercentGoal);
 
         ProgressBar.anchoredPosition = new Vector3(-1 * (100 + StartPosition - (PercentGoal * 100)),

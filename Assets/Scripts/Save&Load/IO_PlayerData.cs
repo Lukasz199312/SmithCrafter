@@ -10,6 +10,7 @@ public class IO_PlayerData : MonoBehaviour
     public ViewsManager _ViewManager;
     public WeaponCollection WeaponList;
     public Inventory inventory;
+    public Shop shop;
 
     // Use this for initialization
     void Awake()
@@ -42,6 +43,7 @@ public class IO_PlayerData : MonoBehaviour
             PlayerPrefs.SetInt("GoldOre", 0);
             PlayerPrefs.SetInt("Diamond", 0);
             InitializeWorkstation2();
+            InitializeShop();
         }
 
         PlayerData.Time = PlayerPrefs.GetString("Time");
@@ -56,6 +58,7 @@ public class IO_PlayerData : MonoBehaviour
         PlayerData.Diamond = PlayerPrefs.GetInt("Diamond");
         LoadWorkStaion();
         LoadInventory();
+        shop.setStringStuffList(PlayerPrefs.GetString("Shop"));
 
     }
 
@@ -87,6 +90,14 @@ public class IO_PlayerData : MonoBehaviour
                 PlayerPrefs.SetInt(NameString + SingleWorkStation.ID, (int)SingleWorkStation.mode);
             }
         }
+    }
+
+    private void InitializeShop()
+    {
+        
+        Debug.Log(shop.ReturnStringStuffList());
+
+        PlayerPrefs.SetString("Shop", "000");
     }
 
     private void LoadWorkStaion()
