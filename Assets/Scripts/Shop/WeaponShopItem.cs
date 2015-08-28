@@ -7,7 +7,7 @@ public class WeaponShopItem : ShopItem, IActionShopItem
 
 	// Use this for initialization
 	void Start () {
-
+        if (ItemObject.GetComponent<Item>().isUnlocked == true) Unlock();
 	}
 	
 	// Update is called once per frame
@@ -15,12 +15,16 @@ public class WeaponShopItem : ShopItem, IActionShopItem
 
 	}
 
-    public void Buy()
+    public void Buy(int Price)
     {
-        ItemGUi.color = ColorBoughtedPanel;
-        BuyButton.interactable = false;
-
-        Unlocked = true;
+        if (PlayerData.Gold >= Price)
+        {
+            PlayerData.Gold = PlayerData.Gold - Price;
+            PlayerData.UpdateResources();
+            Unlock();
+        }
+        else Debug.Log("Masz za malo kasy dorob okno leniu");
+        // w przeciwnym wypadku wyswietlic ma sie okno informujace o braku kasy
     }
 
 }

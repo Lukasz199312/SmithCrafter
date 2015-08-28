@@ -12,12 +12,15 @@ public class PlayerData : MonoBehaviour {
     public static int GoldOre;
     public static int Diamond;
     public static WorkStation[] Workstation;
+    public static List<Item> UnlockedWeapons = new List<Item>();
 
     private static int InventoryHeadID;
     private static ResourcesManager Resources;
     private static WeaponCollection WeaponList; // to delte
 
+
     private static ArrayList Weapons = new ArrayList();
+
 
 	// Use this for initialization
 	void Start () {
@@ -126,6 +129,21 @@ public class PlayerData : MonoBehaviour {
 
         return false;
     }
+
+   public static void addUnlockedWeapon(Item WeaponObject)
+   {
+       UnlockedWeapons.Add(WeaponObject);
+   }
+
+   public static IEnumerator<Item> getUnlockedWeaponEnumerator()
+   {
+       return UnlockedWeapons.GetEnumerator();
+   }
+
+   public static List<Item> getUnlockedWeaponsList()
+   {
+       return UnlockedWeapons;
+   }
 }
 
 

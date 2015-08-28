@@ -10,6 +10,7 @@ public class ShopItem : MonoBehaviour
     protected bool Unlocked = false;
 
     public Color ColorBoughtedPanel;
+    public GameObject ItemObject;
 
     void Awake()
     {
@@ -21,5 +22,13 @@ public class ShopItem : MonoBehaviour
     public bool isUnlocked()
     {
         return Unlocked;
+    }
+
+    public void Unlock()
+    {
+        ItemGUi.color = ColorBoughtedPanel;
+        BuyButton.interactable = false;
+
+        Unlocked = true;
     }
 }   

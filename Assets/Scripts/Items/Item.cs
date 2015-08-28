@@ -8,6 +8,7 @@ public class Item : MonoBehaviour, ICloneable {
     public ItemInformation Information;
     private int SlotID;
     public Image image {  get; private set; }
+    public bool isUnlocked;
 
 	// Use this for initialization
 	void Start () {

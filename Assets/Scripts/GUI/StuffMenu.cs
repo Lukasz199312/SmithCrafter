@@ -88,7 +88,7 @@ public class StuffMenu : MonoBehaviour {
             Stuff.sizeDelta = CelSize;
 
             SetPosition(Stuff);
-            Stuff = SetAnchor(Stuff);
+            Stuff = AnchorOpertion.SetAnchor(Stuff);
 
             Stuffs.Add(Stuff);
             CalculatePointer();
@@ -126,7 +126,7 @@ public class StuffMenu : MonoBehaviour {
             Stuff.sizeDelta = CelSize;
 
             SetPosition(Stuff);
-            Stuff = SetAnchor(Stuff);
+            Stuff = AnchorOpertion.SetAnchor(Stuff);
 
             Stuffs.Add(Stuff);
             CalculatePointer();
@@ -136,22 +136,6 @@ public class StuffMenu : MonoBehaviour {
 
     }
 
-
-
-    private RectTransform SetAnchor(RectTransform t)
-    {
-        RectTransform pt = t.parent as RectTransform;
-        Vector2 newAnchorsMin = new Vector2(t.anchorMin.x + t.offsetMin.x / pt.rect.width,
-                                    t.anchorMin.y + t.offsetMin.y / pt.rect.height);
-        Vector2 newAnchorsMax = new Vector2(t.anchorMax.x + t.offsetMax.x / pt.rect.width,
-                                            t.anchorMax.y + t.offsetMax.y / pt.rect.height);
-
-        t.anchorMin = newAnchorsMin;
-        t.anchorMax = newAnchorsMax;
-        t.offsetMin = t.offsetMax = new Vector2(0, 0);
-
-        return t;
-    }
 
     private void SetPosition(RectTransform transfom)
     {
@@ -192,7 +176,7 @@ public class StuffMenu : MonoBehaviour {
         {
             RectTransform Stuff_item =  transform.GetChild(0).GetChild(i) as RectTransform;
             SetPosition(Stuff_item);
-            Stuff_item = SetAnchor(Stuff_item);
+            Stuff_item = AnchorOpertion.SetAnchor(Stuff_item);
             CalculatePointer();
         }
     }

@@ -36,7 +36,11 @@ public class Shop : MonoBehaviour {
         
         while (enumerator.MoveNext())
         {
-            Items = Items + "0";
+            if (((ShopItem)enumerator.Current).isUnlocked() == true)
+            {
+                Items = Items + "1";
+            }
+            else Items = Items + "0";
         }
 
         return Items;
@@ -53,7 +57,7 @@ public class Shop : MonoBehaviour {
             Debug.Log(Value);
             if (Value == 1)
             {
-                ((IActionShopItem)enumerator.Current).Buy();
+                ((ShopItem)enumerator.Current).Unlock();
                 Debug.Log("Kupilem To co chcialem");
             }
             Index++;

@@ -44,6 +44,7 @@ public class IO_PlayerData : MonoBehaviour
             PlayerPrefs.SetInt("Diamond", 0);
             InitializeWorkstation2();
             InitializeShop();
+            IntializeWeapon();
         }
 
         PlayerData.Time = PlayerPrefs.GetString("Time");
@@ -58,6 +59,7 @@ public class IO_PlayerData : MonoBehaviour
         PlayerData.Diamond = PlayerPrefs.GetInt("Diamond");
         LoadWorkStaion();
         LoadInventory();
+        LoadWeapon();
         shop.setStringStuffList(PlayerPrefs.GetString("Shop"));
 
     }
@@ -76,6 +78,9 @@ public class IO_PlayerData : MonoBehaviour
         PlayerPrefs.SetInt("Diamond", PlayerData.Diamond);
 
         SaveInventory();
+       // SaveShopInformation();
+        SaveUnlockedWeapons();
+
         PlayerPrefs.SetInt("InventoryHeadID", inventory.InventoryHeadID );
         PlayerPrefs.Save();
     }
@@ -100,6 +105,18 @@ public class IO_PlayerData : MonoBehaviour
         PlayerPrefs.SetString("Shop", "000");
     }
 
+    private void IntializeWeapon()
+    {
+        String  ByteWeaponsList = "";
+        foreach(Item SingleWeapon in WeaponList.WeaponsList)
+        {
+            if (SingleWeapon.isUnlocked == true) ByteWeaponsList = ByteWeaponsList + "1";
+            else ByteWeaponsList = ByteWeaponsList + "0";
+        }
+
+        PlayerPrefs.SetString("WeaponList", ByteWeaponsList);
+    }
+
     private void LoadWorkStaion()
     {
         PlayerData.Workstation = new WorkStation[NumberWorkstation];
@@ -116,37 +133,6 @@ public class IO_PlayerData : MonoBehaviour
         }
     }
 
-
-    private void SaveInventory_OLD()
-    {
-
-        for (int i = 1; i <= PlayerPrefs.GetInt("InventoryHeadID"); i++)
-        {
-            PlayerPrefs.DeleteKey("SLOT_" + i);
-            
-        }
-
-
-        int ID = 1;
-        String ItemID = "";
-
-        foreach (Item SingleItem in PlayerData.getWeaponsList())
-        {
-            if (SingleItem.Information.getID() < 10) ItemID = "00";
-            else if (SingleItem.Information.getID() < 100) ItemID = "0";
-
-            String strID = IntToString(SingleItem.Information.getID());
-            String strNumber = SingleItem.Information.Number.ToString();
-
-            Debug.Log(strID);
-            Debug.Log(strNumber);
-
-            PlayerPrefs.SetString("SLOT_" + ID, strID + strNumber);
-            ID++;
-
-            Debug.Log("SAVe ID: " + ID);
-        }
-    }
 
     private void SaveInventory()
     {
@@ -179,6 +165,12 @@ public class IO_PlayerData : MonoBehaviour
         }
     }
 
+
+    private void SaveShopInformation()
+    {
+        //PlayerPrefs.SetString("Shop", shop.ReturnStringStuffList());
+    }
+
     private void LoadInventory()
     {
         int ID = PlayerPrefs.GetInt("InventoryHeadID");
@@ -207,34 +199,43 @@ public class IO_PlayerData : MonoBehaviour
         }
     }
 
+   private void LoadWeapon()
+   {
+       String Weapons = PlayerPrefs.GetString("WeaponList");
 
-    private void LoadInventory_OLD()
-    {
-        int ID = PlayerPrefs.GetInt("InventoryHeadID");
-        for (int i = 1; i <= ID; i++)
-        {
-            String strItem = PlayerPrefs.GetString("SLOT_" + i);
+       IEnumerator enumerator = WeaponList.WeaponsList.GetEnumerator();
 
-            String strID = strItem.Substring(0, 3);
-            Debug.Log(strID);
+       int id = 0;
+       while(enumerator.MoveNext())
+       {
+           Item WeaponItem = (Item)enumerator.Current;
+           object obj = Weapons.ToCharArray().GetValue(id);
+           int Value = Convert.ToInt32( obj.ToString() );
 
-            String strNumber = strItem.Substring(3);
-            Debug.Log(strNumber);
+           if (Value == 1)
+           {
+               WeaponItem.isUnlocked = true;
+               PlayerData.addUnlockedWeapon(WeaponItem);
+           }
 
-            Item Weapon = (Item)WeaponList.WeaponsList[Convert.ToInt32(strID)].Clone();
+           id++;
+       }
 
-            Weapon.Information.SetID(Convert.ToInt32(strID));
-            Weapon.Information.Number = Convert.ToInt32(strNumber);
-            Weapon.setSlotID(i);
+   }
 
-            Debug.Log("Weapon id:" + Weapon.Information.getID());
-            Debug.Log("Weapon Number" + Weapon.Information.Number);
+    private void SaveUnlockedWeapons()
+   {
+       IEnumerator enumerator = WeaponList.WeaponsList.GetEnumerator();
+       String str = "";
+       while (enumerator.MoveNext())
+       {
+           if (((Item)enumerator.Current).isUnlocked == true) str = str + "1";
+           else str = str + "0";
+       }
 
-            PlayerData.AddWeapon(Weapon);
-            Weapon.Information.Number--;
+       PlayerPrefs.SetString("WeaponList", str);
+   }
 
-        }
-    }
 
     private String IntToString(int Number)
     {

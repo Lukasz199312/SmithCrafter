@@ -5,6 +5,6 @@ using System.Text;
 
 public interface IActionShopItem
 {
-    void Buy();
+    void Buy(int Price);
 }
 
