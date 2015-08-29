@@ -25,13 +25,6 @@ public class ActiveWeaponsList : MonoBehaviour {
 
             UnlockedWeapon_RT.sizeDelta = Source.sizeDelta;
 
-            UnlockedWeapon_RT.transform.position = new Vector3(Source.position.x,
-                                                                    Source.position.y - (Head * (Source.rect.height + Spaceing)),
-                                                                    Source.position.z);
-
-
-            UnlockedWeapon_RT = AnchorOpertion.SetAnchor(UnlockedWeapon_RT);
-
             UnlockedWeapon UnlockedWeapon = (UnlockedWeapon)UnlockedWeapon_RT.GetComponent<UnlockedWeapon>();
             UnlockedWeapon.setItem(item);
 
@@ -39,29 +32,89 @@ public class ActiveWeaponsList : MonoBehaviour {
 
         }
 
+
         Source.gameObject.SetActive(false);
+
+        Debug.Log(Main.transform.childCount);
+       // Source.gameObject.SetActive(false);
         ScaleContent();
+        RePosition(Main);
+       // Main = AnchorOpertion.SetAnchor(Main);
+        Main.transform.parent.transform.parent.gameObject.SetActive(false);
 	}
+
 
     private void ScaleContent()
     {
 
-        SetParentChild(null);
-        float ScaleSize = Source.rect.height * Head;
+        GameObject tmpObject = new GameObject("TMP_ActiveWeapons");
+        SetParentChild(Main.gameObject, tmpObject);
+
+        float ScaleSize = Source.rect.height * (Head - 1) + Spaceing;
         Main.sizeDelta = new Vector2(Main.sizeDelta.x, Main.sizeDelta.y + ScaleSize);
-        SetParentChild(Main.transform);
+
+        Main.transform.position = new Vector3( Main.transform.position.x,
+                                               Main.transform.position.y - ScaleSize / 2,
+                                               Main.transform.position.z);
+
+        SetParentChild(tmpObject, Main.gameObject);
+
+        Destroy(tmpObject);
+
     }
 
-    private void SetParentChild(Transform parent)
+    private void RePosition(RectTransform SourceObject)
     {
-       // foreach(GameObject ChildObject in gameObject.GetComponentsInChildren( , false ));
-       // {
-         //   ChildObject.transform.parent = parent;
-        //}
+        Head = 0;
+        for (int i = 0; i < SourceObject.transform.childCount; i++)
+        {
+            RectTransform UnlockedWeapon_RT = SourceObject.transform.GetChild(i) as RectTransform;
+
+            if (UnlockedWeapon_RT.gameObject.active == false && SourceObject.transform.GetChild(i + 1) != null) continue;
+
+            UnlockedWeapon_RT.transform.position = new Vector3(SourceObject.position.x,
+                                                        ((SourceObject.position.y + SourceObject.rect.height / 2)) - ((Source.rect.height * Head) + Source.rect.height / 2) - Spaceing,
+                                                        Source.position.z);
+
+            UnlockedWeapon_RT = AnchorOpertion.SetAnchor(UnlockedWeapon_RT);
+
+            Head++;
+
+        }
+    }
+
+    private void SetParentChild(GameObject Source, GameObject Destinity)
+    {
+
+        int SizeChild = Source.transform.childCount;
+
+        while(Source.transform.childCount > 0 )
+        {
+            Source.transform.GetChild(0).parent = Destinity.transform;
+        }
+    }
+
+    public void AddNew(Item item)
+    {
+        Source.gameObject.SetActive(true);
+        RectTransform UnlockedWeapon_RT = Instantiate(Source);
+        UnlockedWeapon_RT.transform.parent = this.transform;
+
+        UnlockedWeapon_RT.sizeDelta = Source.sizeDelta;
+
+        UnlockedWeapon UnlockedWeapon = (UnlockedWeapon)UnlockedWeapon_RT.GetComponent<UnlockedWeapon>();
+        UnlockedWeapon.setItem(item);
+
+        Head++;
+
+        Source.gameObject.SetActive(false);
+
+        ScaleContent();
+        RePosition(Main);
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 }

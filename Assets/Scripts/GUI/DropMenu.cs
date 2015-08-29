@@ -14,7 +14,7 @@ public class DropMenu : MonoBehaviour {
     private CanvasGroup canvasgroup;
     private Animator anim;
     private bool isMenuOpen = false;
-
+    //------------------------------------------
 	// Use this for initialization
 	void Start () {
         _ViewsManager = GetComponent<ViewsManager>();
@@ -22,7 +22,7 @@ public class DropMenu : MonoBehaviour {
         anim = Menu.GetComponent<Animator>();
 
 	}
-	
+    //------------------------------------------
 	// Update is called once per frame
 	void Update () {
         GameObject Object = _ViewsManager.Touch_Action.Touch.SelectedGameObject;
@@ -63,7 +63,7 @@ public class DropMenu : MonoBehaviour {
         }
 
     }
-
+    //------------------------------------------
     public void ToggleOffMenu()
     {
         if (isMenuOpen == true)
@@ -86,6 +86,12 @@ public class DropMenu : MonoBehaviour {
         WorkerInformation.ToggleOn(Worker, Worker.CraftingItem);
 
         Debug.Log(Worker.CraftingItem.Information.RequireHitPoints);
+    }
+
+    //------------------------------------------
+    public void ShowMenu(ActiveWeaponsList ActiveWeapons)
+    {
+        ActiveWeapons.gameObject.SetActive(true);
     }
 
     //------------------------------------------
