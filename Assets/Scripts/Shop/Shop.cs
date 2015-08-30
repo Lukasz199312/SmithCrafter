@@ -54,11 +54,9 @@ public class Shop : MonoBehaviour {
         while (enumerator.MoveNext())
         {
             int Value = Int32.Parse(Items.Substring(Index,1));
-            Debug.Log(Value);
             if (Value == 1)
             {
                 ((ShopItem)enumerator.Current).Unlock();
-                Debug.Log("Kupilem To co chcialem");
             }
             Index++;
         }

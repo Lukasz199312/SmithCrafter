@@ -92,6 +92,7 @@ public class DropMenu : MonoBehaviour {
     public void ShowMenu(ActiveWeaponsList ActiveWeapons)
     {
         ActiveWeapons.gameObject.SetActive(true);
+        ActiveWeapons.SetWorkStationInformation(SelectedObject.GetComponent<WorkStation>());
     }
 
     //------------------------------------------
